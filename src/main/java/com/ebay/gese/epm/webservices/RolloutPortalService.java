@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -26,6 +27,7 @@ import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 @SuppressWarnings("restriction")
 public class RolloutPortalService {
+	final static Logger logger = Logger.getLogger(RolloutPortalService.class);
 	
 	public static void addROPPools (int trainid) {
 		StringBuilder sb = new StringBuilder();
@@ -52,20 +54,23 @@ public class RolloutPortalService {
 					(conn.getInputStream())));
 
 			String output;
-			System.out.println("Output from Server ....");
+			//System.out.println("Output from Server ....");
+			logger.debug("Output from Server ....");
 			while ((output = br.readLine()) != null) {
-				sb.append(output);
-				System.out.println(output);
+				//sb.append(output);
+				logger.debug(output);
+				//System.out.println(output);
+				logger.debug(output);
 			}
 
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} catch (IOException e) {
-
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		}
 		JSONParser parser = new JSONParser();
 		// Object obj1 = parser.parse(output);
@@ -74,22 +79,26 @@ public class RolloutPortalService {
 			obj = parser.parse(sb.toString());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 			System.exit(1);
 		}
 		JSONObject jsonObject = (JSONObject) obj;
 		String status =  (String)jsonObject.get("status");
-		System.out.println(status);
+		//System.out.println(status);
+		logger.debug(status);
 		
 		//check if status not successful and exit
 		
 		if (!status.equals("SUCCESS")) {
-			System.out.println("Rollout Portal api call failed. Exiting..");
+			//System.out.println("Rollout Portal api call failed. Exiting..");
+			logger.debug("Rollout Portal api call failed. Exiting..");
 			System.exit(1);
 		}
 		JSONArray pools = (JSONArray) jsonObject.get("pools");	
 		for (int i = 0; i < pools.size(); i++) {
-			System.out.println("Pool is " + pools.get(i));
+			//System.out.println("Pool is " + pools.get(i));
+			logger.debug("Pool is " + pools.get(i));
 			poolList.add((String) pools.get(i));
 		}
 		//Call DRService to check get a formatted lised of RE owned pools
@@ -119,25 +128,31 @@ public class RolloutPortalService {
 		}
 		JSONObject jsonObject = (JSONObject) obj;
 		String status =  (String)jsonObject.get("status");
-		System.out.println(status);
+		//System.out.println(status);
+		logger.debug(status);
 		
 		//check if status not successful and exit
 		
 		if (!status.equals("SUCCESS")) {
-			System.out.println("Rollout Portal api call failed. Exiting..");
+			//System.out.println("Rollout Portal api call failed. Exiting..");
+			logger.debug("Rollout Portal api call failed. Exiting..");
 			System.exit(1);
 		}
 		
-		System.out.println("poolBuild is "+ jsonObject.get("poolBuild"));
+		//System.out.println("poolBuild is "+ jsonObject.get("poolBuild"));
+		logger.debug("poolBuild is "+ jsonObject.get("poolBuild"));
 		
 		if (jsonObject.get("poolBuild") != null) {
 			JSONObject innerObject = (JSONObject) jsonObject.get("poolBuild");
 			String timeStamp =  (String)innerObject.get("formatedTimestamp");
-			System.out.println("Approved timestamp is "+ timeStamp);
+			//System.out.println("Approved timestamp is "+ timeStamp);
+			logger.debug("Approved timestamp is "+ timeStamp);
 			long v3buildid =  (Long)innerObject.get("qaV3BuildId");
-			System.out.println("Approved java build is "+ v3buildid);
+			//System.out.println("Approved java build is "+ v3buildid);
+			logger.debug("Approved java build is "+ v3buildid);
 			long xslbuildid =  (Long)innerObject.get("qaXslBuildId");
-			System.out.println("Approved xsl build is "+ xslbuildid);
+			//System.out.println("Approved xsl build is "+ xslbuildid);
+			logger.debug("Approved xsl build is "+ xslbuildid);
 			
 			//This is the first time we will insert Data into BuildTaskDetail table
 			//get currentRunid
@@ -152,21 +167,26 @@ public class RolloutPortalService {
 				//System.out.println("db time is "+ time);
 				//Timestamp time = BuildDAO.getTimestamp(poolName, previousRunid);;
 				String formattedDbDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time);
-				System.out.println("formatted timestamp is "+ formattedDbDate);
-				System.out.println("Rollout api time is "+ normalizedTimestamp);
+				//System.out.println("formatted timestamp is "+ formattedDbDate);
+				logger.debug("formatted timestamp is "+ formattedDbDate);
+				//System.out.println("Rollout api time is "+ normalizedTimestamp);
+				logger.debug("Rollout api time is "+ normalizedTimestamp);
 				//compare dbtime with normalized time
 				if (DateUtil.compareTimeStamps(normalizedTimestamp, formattedDbDate)) {
-					System.out.println("New timestamp is later than db time stamp");
+					//System.out.println("New timestamp is later than db time stamp");
+					logger.debug("New timestamp is later than db time stamp");
 					BuildTO bsd = new BuildTO(runid, poolName, v3buildid, xslbuildid, normalizedTimestamp, "INIT", trainid, 0);
 					InsertBuildData.setInitData(bsd);
 				} else {
-					System.out.println("DB time is current. Nothing to do.");
+					//System.out.println("DB time is current. Nothing to do.");
+					logger.debug("DB time is current. Nothing to do.");
 				}
 				
 			} else {
 				//this means this is a brand new entry. No previous reference available
 				//insert make the first entry
-				System.out.println("No previous reference found. Adding in DB");
+				//System.out.println("No previous reference found. Adding in DB");
+				logger.debug("No previous reference found. Adding in DB");
 				BuildTO bsd = new BuildTO(runid, poolName, v3buildid, xslbuildid, normalizedTimestamp, "INIT", trainid, 0);
 				InsertBuildData.setInitData(bsd);
 			}
@@ -187,7 +207,8 @@ public class RolloutPortalService {
 					BuildTO bto = new BuildTO(runid, xslbuild, "INIT", trainid, 0);
 					InsertBuildData.setXslInitData(bto);
 				} else {
-					System.out.println("Noting new to build xsl");
+					//System.out.println("Noting new to build xsl");
+					logger.debug("Noting new to build xsl");
 				}
 	}
 
@@ -215,7 +236,8 @@ public class RolloutPortalService {
 					(conn.getInputStream())));
 
 			String output;
-			System.out.println("checking for pool " + poolName);
+			//System.out.println("checking for pool " + poolName);
+			logger.debug("checking for pool " + poolName);
 			// System.out.println("Output from Server ....");
 			while ((output = br.readLine()) != null) {
 				sb.append(output);
@@ -225,11 +247,11 @@ public class RolloutPortalService {
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} catch (IOException e) {
-
 			e.printStackTrace();
+			logger.error(e);
 		}
 		return sb;
 	}

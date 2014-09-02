@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.log4j.Logger;
+
 public class UpdateXSLBuildData {
+	final static Logger logger = Logger.getLogger(UpdateXSLBuildData.class);
 	public static void updateBuildStatus(int runid, String status, long requestid, long projectid, long builidid, int attempt) {
 		Connection conn = new ConnectionProvider().connection();
 		String sql = ("update xslbuildtaskdetail set status = '"+ status +"', projectid ="+ projectid + ", requestid ="+ requestid +", buildid =" + builidid +
@@ -17,7 +20,8 @@ public class UpdateXSLBuildData {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(stmt);
 			ConnectionProvider.close(conn);
@@ -35,7 +39,8 @@ public class UpdateXSLBuildData {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(stmt);
 			ConnectionProvider.close(conn);
@@ -52,7 +57,8 @@ public class UpdateXSLBuildData {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(stmt);
 			ConnectionProvider.close(conn);

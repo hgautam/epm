@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -16,6 +17,7 @@ import com.ebay.gese.epm.db.UpdateBuildData;
 import com.ebay.gese.epm.db.UpdateXSLBuildData;
 
 public class MonitorBuildService {
+	final static Logger logger = Logger.getLogger(MonitorBuildService.class);
 	public static long getBuildId(long projectid, long requestid) {
 		StringBuilder sb = new StringBuilder();
 		long buildid = 0;
@@ -36,21 +38,24 @@ public class MonitorBuildService {
 					(conn.getInputStream())));
 
 			String output;
-			System.out.println("getting buildid for requestid " + requestid);
+			//System.out.println("getting buildid for requestid " + requestid);
+			logger.debug("getting buildid for requestid " + requestid);
 			// System.out.println("Output from Server ....");
 			while ((output = br.readLine()) != null) {
 				sb.append(output);
-				System.out.println(output);
+				//System.out.println(output);
+				logger.debug(output);
 			}
 
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
 
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} catch (IOException e) {
-
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		}
 		
 		JSONParser parser = new JSONParser();
@@ -60,14 +65,16 @@ public class MonitorBuildService {
 			obj = parser.parse(sb.toString());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 			System.exit(1);
 		}
 		
 		JSONObject jsonObject = (JSONObject) obj;
 		if (jsonObject != null) {
 			buildid  =  (Long)jsonObject.get("buildId");
-			System.out.println("buildid is "+ buildid);
+			//System.out.println("buildid is "+ buildid);
+			logger.debug("buildid is "+ buildid);
 			UpdateBuildData.updateBuildId(buildid, projectid, requestid);
 		}
 		return buildid;
@@ -100,21 +107,23 @@ public class MonitorBuildService {
 					(conn.getInputStream())));
 
 			String output;
-			System.out.println("getting buildid for requestid " + requestid);
+			//System.out.println("getting buildid for requestid " + requestid);
+			logger.debug("getting buildid for requestid " + requestid);
 			// System.out.println("Output from Server ....");
 			while ((output = br.readLine()) != null) {
 				sb.append(output);
-				System.out.println(output);
+				//System.out.println(output);
+				logger.debug(output);
 			}
 
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} catch (IOException e) {
-
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		}
 		
 		JSONParser parser = new JSONParser();
@@ -124,13 +133,15 @@ public class MonitorBuildService {
 			obj = parser.parse(sb.toString());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 			System.exit(1);
 		}
 		JSONObject jsonObject = (JSONObject) obj;
 		if (jsonObject != null) {
 			status  =  (String)jsonObject.get("buildStatus");
-			System.out.println("build status is "+ status);
+			//System.out.println("build status is "+ status);
+			logger.debug("build status is "+ status);
 			//insert build status
 			if (status != null) {
 				UpdateBuildData.updateBuildStatus(projectid, requestid, status);
@@ -159,21 +170,23 @@ public class MonitorBuildService {
 					(conn.getInputStream())));
 
 			String output;
-			System.out.println("getting buildid for requestid " + requestid);
+			//System.out.println("getting buildid for requestid " + requestid);
+			logger.debug("getting buildid for requestid " + requestid);
 			// System.out.println("Output from Server ....");
 			while ((output = br.readLine()) != null) {
 				sb.append(output);
-				System.out.println(output);
+				//System.out.println(output);
+				logger.debug(output);
 			}
 
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} catch (IOException e) {
-
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		}
 		
 		JSONParser parser = new JSONParser();
@@ -183,14 +196,16 @@ public class MonitorBuildService {
 			obj = parser.parse(sb.toString());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 			System.exit(1);
 		}
 		
 		JSONObject jsonObject = (JSONObject) obj;
 		if (jsonObject != null) {
 			buildid  =  (Long)jsonObject.get("buildId");
-			System.out.println("buildid is "+ buildid);
+			//System.out.println("buildid is "+ buildid);
+			logger.debug("buildid is "+ buildid);
 			UpdateXSLBuildData.updateXslBuildId(buildid, projectid, requestid);
 		}
 		return buildid;
@@ -228,21 +243,23 @@ public class MonitorBuildService {
 					(conn.getInputStream())));
 
 			String output;
-			System.out.println("getting buildid for requestid " + requestid);
+			//System.out.println("getting buildid for requestid " + requestid);
+			logger.debug("getting buildid for requestid " + requestid);
 			// System.out.println("Output from Server ....");
 			while ((output = br.readLine()) != null) {
 				sb.append(output);
-				System.out.println(output);
+				//System.out.println(output);
+				logger.debug(output);
 			}
 
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
-
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} catch (IOException e) {
-
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		}
 		
 		JSONParser parser = new JSONParser();
@@ -252,13 +269,15 @@ public class MonitorBuildService {
 			obj = parser.parse(sb.toString());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 			System.exit(1);
 		}
 		JSONObject jsonObject = (JSONObject) obj;
 		if (jsonObject != null) {
 			status  =  (String)jsonObject.get("buildStatus");
-			System.out.println("build status is "+ status);
+			//System.out.println("build status is "+ status);
+			logger.debug("build status is "+ status);
 			//insert build status
 			if (status != null) {
 				UpdateXSLBuildData.updateXslBuildStatus(projectid, requestid, status, buildid);

@@ -2,6 +2,7 @@ package com.ebay.gese.epm.domain;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -17,6 +18,7 @@ import com.ebay.gese.epm.webservices.SubmitBuildService;
  */
 
 public class BuildTaskManager implements Job {
+	final static Logger logger = Logger.getLogger(BuildTaskManager.class);
 	public void execute(JobExecutionContext context)
 			throws JobExecutionException {
 		//find out number of builds eligible for submission
@@ -27,17 +29,22 @@ public class BuildTaskManager implements Job {
 		
 		//System.out.println("Arraylist size is "+ poolsToBuild.size());
 		if (poolsToBuild.size() < 1) {
-			System.out.println("Nothing to build for java");
-			System.out.println("checking for xsl now...");
+			//System.out.println("Nothing to build for java");
+			logger.debug("Nothing to build for java");
+			//System.out.println("checking for xsl now...");
+			logger.debug("checking for xsl now...");
 			BuildTO bto = BuildDAO.getXslToBuild(runid);
 			if (bto != null) {
-				System.out.println("in main "+ bto.getXslBuildId());
-				System.out.println("in main "+ bto.getAttempt());
+				//System.out.println("in main "+ bto.getXslBuildId());
+				logger.debug("in main "+ bto.getXslBuildId());
+				//System.out.println("in main "+ bto.getAttempt());
+				logger.debug("in main "+ bto.getAttempt());
 				int attempt = bto.getAttempt() + 1;
 				SubmitBuildService.submitXslBuild(bto.getXslBuildId(), "v3xsl", runid, attempt);
 				return;
 			} else {
-				System.out.println("Nothing to build for xsl. Exitting...");
+				//System.out.println("Nothing to build for xsl. Exitting...");
+				logger.debug("Nothing to build for xsl. Exitting...");
 				System.exit(0);
 			}
 		}
@@ -46,11 +53,15 @@ public class BuildTaskManager implements Job {
 		int buildPool = 10;
 		if (poolsToBuild.size() <= buildPool) {
 			for (BuildTO bt : poolsToBuild) {
-				System.out.println("in main " + bt.getPoolName());
-				System.out.println("in main " + bt.getJavaBuildId());
-				System.out.println("in main " + bt.getAttempt());
+				//System.out.println("in main " + bt.getPoolName());
+				logger.debug("in main " + bt.getPoolName());
+				//System.out.println("in main " + bt.getJavaBuildId());
+				logger.debug("in main " + bt.getJavaBuildId());
+				//System.out.println("in main " + bt.getAttempt());
+				logger.debug("in main " + bt.getAttempt());
 				int attempt = bt.getAttempt() + 1;
-				System.out.println("Calling submit build service...");
+				//System.out.println("Calling submit build service...");
+				logger.debug("Calling submit build service...");
 				SubmitBuildService.submitBuild(bt.getJavaBuildId(), bt.getPoolName(), runid, attempt);
 			}
 		} else {
@@ -61,10 +72,14 @@ public class BuildTaskManager implements Job {
 			}
 			for (BuildTO bt : modifiedList) {
 				//update the DB with ready to start
-				System.out.println("in main " + bt.getPoolName());
-				System.out.println("in main " + bt.getJavaBuildId());
-				System.out.println("in main " + bt.getStatus());
-				System.out.println("in main " + bt.getAttempt());
+				//System.out.println("in main " + bt.getPoolName());
+				logger.debug("in main " + bt.getPoolName());
+				//System.out.println("in main " + bt.getJavaBuildId());
+				logger.debug("in main " + bt.getJavaBuildId());
+				//System.out.println("in main " + bt.getStatus());
+				logger.debug("in main " + bt.getStatus());
+				//System.out.println("in main " + bt.getAttempt());
+				logger.debug("in main " + bt.getAttempt());
 				int attempt = bt.getAttempt() + 1;
 				SubmitBuildService.submitBuild(bt.getJavaBuildId(), bt.getPoolName(), runid, attempt);
 			}
@@ -73,12 +88,15 @@ public class BuildTaskManager implements Job {
 		//Next step is to submit xsl build
 		BuildTO bto = BuildDAO.getXslToBuild(runid);
 		if (bto != null) {
-			System.out.println("in main "+ bto.getXslBuildId());
-			System.out.println("in main "+ bto.getAttempt());
+			//System.out.println("in main "+ bto.getXslBuildId());
+			logger.debug("in main "+ bto.getXslBuildId());
+			//System.out.println("in main "+ bto.getAttempt());
+			logger.debug("in main "+ bto.getAttempt());
 			int attempt = bto.getAttempt() + 1;
 			SubmitBuildService.submitXslBuild(bto.getXslBuildId(), "v3xsl", runid, attempt);
 		}
-		System.out.println("******End of RUN****");
+		//System.out.println("******End of RUN****");
+		logger.debug("******End of RUN****");
 		System.exit(0);
 	}
 }

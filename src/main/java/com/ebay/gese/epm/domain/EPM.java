@@ -8,7 +8,7 @@ package com.ebay.gese.epm.domain;
  * appropriate classes
  */
 import java.util.ArrayList;
-
+import org.apache.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -22,12 +22,14 @@ import com.ebay.gese.epm.webservices.DRService;
 import com.ebay.gese.epm.webservices.RolloutPortalService;
  
 public class EPM implements Job {
+	final static Logger logger = Logger.getLogger(EPM.class);
 	
 	public void execute(JobExecutionContext context)
 	throws JobExecutionException {
 		//Get current runid and locale
 		String currentLocale = EpmDAO.getCurrentLocale();
-		System.out.println("Last run was for "+ currentLocale);
+		//System.out.println("Last run was for "+ currentLocale);
+		logger.debug("Last run was for "+ currentLocale);
 		
 		
 		if (currentLocale.equals("intl")) {
@@ -45,12 +47,14 @@ public class EPM implements Job {
 		
 		//Get current train
 		int trainid = DRService.getCurrentTrain();
-		System.out.println("Current train is: "+ trainid);
+		//System.out.println("Current train is: "+ trainid);
+		logger.debug("Current train is: "+ trainid);
 		
 		//Find if we already have ROP for current train
 		
 		if (!ROPDAO.getCurrentTrainfromROP(trainid)) {
-			System.out.println("This train does not exist in DB.");
+			//System.out.println("This train does not exist in DB.");
+			logger.debug("This train does not exist in DB.");
 			RolloutPortalService.addROPPools(trainid);
 		}
 		
@@ -74,10 +78,12 @@ public class EPM implements Job {
 		}
 		
 		//persist xsl build
-		System.out.println("Checking XSL build.........");
+		//System.out.println("Checking XSL build.........");
+		logger.debug("Checking XSL build.........");
 		RolloutPortalService.persistXslBuildDetails(trainid);
 		
-		System.out.println("***********Finished current run******************");
+		//System.out.println("***********Finished current run******************");
+		logger.debug("***********Finished current run******************");
 		System.exit(0);//this needs to be commented out at some point :-)
 		} 
  }

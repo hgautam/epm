@@ -10,8 +10,10 @@ import java.net.URL;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 public class DRService {
-	
+	final static Logger logger = Logger.getLogger(DRService.class);
 	public static int getCurrentTrain() {
 		String output;
 		int trainid = -1;
@@ -23,8 +25,10 @@ public class DRService {
 			conn.setDoOutput(true);
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != java.net.HttpURLConnection.HTTP_OK) {
-				System.out.println("status code is:" + conn.getResponseCode());
-				System.out.println("DR get current release service is down.");
+				//System.out.println("status code is:" + conn.getResponseCode());
+				//System.out.println("DR get current release service is down.");
+				logger.debug("status code is:" + conn.getResponseCode());
+				logger.debug("DR get current release service is down.");
 				throw new RuntimeException("Failed : HTTP error code : "
 						+ conn.getResponseCode());
 			}
@@ -39,11 +43,14 @@ public class DRService {
 			}
 		} catch (MalformedURLException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			//e1.printStackTrace();
+			logger.error(e1);
 		} catch (ProtocolException e2) {
-			e2.printStackTrace();
+			//e2.printStackTrace();
+			logger.error(e2);
 		} catch (IOException e3) {
-			e3.printStackTrace();
+			//e3.printStackTrace();
+			logger.error(e3);
 		}
 
 		conn.disconnect();
@@ -53,7 +60,8 @@ public class DRService {
 		ArrayList<String> reOwnedPoolList = new ArrayList<String>();
 		for (String poolName : poolList) {
 			if (isREOwned(poolName)){
-				System.out.println("added to re-owned "+ poolName);
+				//System.out.println("added to re-owned "+ poolName);
+				logger.debug("added to re-owned "+ poolName);
 				reOwnedPoolList.add(poolName);
 			}
 			 
@@ -93,11 +101,14 @@ public class DRService {
 			}
 		} catch (MalformedURLException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			//e1.printStackTrace();
+			logger.error(e1);
 		} catch (ProtocolException e2) {
-			e2.printStackTrace();
+			//e2.printStackTrace();
+			logger.error(e2);
 		} catch (IOException e3) {
-			e3.printStackTrace();
+			//e3.printStackTrace();
+			logger.error(e3);
 		}
 
 		conn.disconnect();

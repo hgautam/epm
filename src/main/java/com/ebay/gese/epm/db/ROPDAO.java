@@ -6,8 +6,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 public class ROPDAO {
-	
+	final static Logger logger = Logger.getLogger(ROPDAO.class);
 	public static boolean getCurrentTrainfromROP(int trainid) {
 		Connection conn = new ConnectionProvider().connection();
 		String sql = ("SELECT count(*) FROM rop where train ="+ trainid);
@@ -21,7 +23,8 @@ public class ROPDAO {
 			count = rs.getInt(1);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -51,7 +54,8 @@ public class ROPDAO {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);

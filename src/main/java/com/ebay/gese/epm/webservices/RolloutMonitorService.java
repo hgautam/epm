@@ -8,10 +8,13 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
+
 import com.ebay.gese.epm.db.PoolDAO;
 import com.ebay.gese.epm.db.RolloutTO;
 
 public class RolloutMonitorService {
+	final static Logger logger = Logger.getLogger(RolloutMonitorService.class);
 	
 	public static void setRolloutStatus(RolloutTO rto) {
 		
@@ -34,17 +37,21 @@ public class RolloutMonitorService {
 			conn.setDoOutput(true);
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != java.net.HttpURLConnection.HTTP_OK) {
-				System.out.println("status code is:" + conn.getResponseCode());
+				//System.out.println("status code is:" + conn.getResponseCode());
+				logger.debug("status code is:" + conn.getResponseCode());
 				throw new RuntimeException("Failed : HTTP error code : "
 						+ conn.getResponseCode());
 			}
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(
 					(conn.getInputStream())));
-			 System.out.println("Output from Server .... \n");
+			 //System.out.println("Output from Server .... \n");
+			 logger.debug("Output from Server .... \n");
 			while ((output = br.readLine()) != null) {
-				System.out.println(output);
-				sb.append(output);
+				//System.out.println(output);
+				logger.debug(output);
+				//sb.append(output);
+				logger.debug(output);
 			}
 			
 			String [] httpOutput = sb.toString().split(":");

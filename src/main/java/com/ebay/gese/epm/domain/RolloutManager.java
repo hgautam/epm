@@ -2,6 +2,7 @@ package com.ebay.gese.epm.domain;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -16,6 +17,7 @@ import com.ebay.gese.epm.db.RolloutTO;
 
 
 public class RolloutManager implements Job{
+	final static Logger logger = Logger.getLogger(RolloutManager.class);
 	public void execute(JobExecutionContext context)
 			throws JobExecutionException {
 		//get current run id
@@ -26,8 +28,10 @@ public class RolloutManager implements Job{
 		
 		if (poolsToMonitor.size() >= 1) {
 			for(BuildTO bt:poolsToMonitor) {
-				System.out.println(bt.getPoolName());
-			    System.out.println(bt.getBuildId());
+				//System.out.println(bt.getPoolName());
+				logger.debug(bt.getPoolName());
+			    //System.out.println(bt.getBuildId());
+			    logger.debug(bt.getBuildId());
 			    RolloutTO rto = new RolloutTO();
 			    rto.setRunid(runid);
 			    //Moved this logic inside BuildDAO.getPoolstoRoll method
@@ -44,14 +48,17 @@ public class RolloutManager implements Job{
 			//now i want to check for xsl after i have established that i have atleast one java build ready to rollout
 			long xslbuild = BuildDAO.getXslToRoll(runid);
 			if (xslbuild == 0) {
-				System.out.println("No xsl build available to start the rollouts yet!.");
+				//System.out.println("No xsl build available to start the rollouts yet!.");
+				logger.debug("No xsl build available to start the rollouts yet!.");
 			} else {
 				InsertRolloutData.updateXslRollout(runid, xslbuild);
 			}
 		} else {
-			System.out.println("Noting to Rollout yet...");
+			//System.out.println("Noting to Rollout yet...");
+			logger.debug("Noting to Rollout yet...");
 		}
-		System.out.println("******End of RUN****");
+		//System.out.println("******End of RUN****");
+		logger.debug("******End of RUN****");
 		System.exit(0);
 	}
 

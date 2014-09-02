@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.log4j.Logger;
+
 
 public class InsertRolloutData {
+	final static Logger logger = Logger.getLogger(InsertRolloutData.class);
 	public static void insertRollout(RolloutTO rto) {
 		Connection conn = new ConnectionProvider().connection();
 		Statement stmt = null;
@@ -24,7 +27,8 @@ public class InsertRolloutData {
 					"VALUES ("+ runid +",'" + poolname + "','" + status +"',"+ javabuild +","+ xslbuild +","+ train + ","+ attempt +",'"+ jira +"')");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(stmt);
 			ConnectionProvider.close(conn);
@@ -40,7 +44,8 @@ public class InsertRolloutData {
 			stmt.executeUpdate("update `EPM`.`rollouttask` SET xslbuild ="+ buildid + " , status = '"+ status + "' where runid ="+ runid +" and status = 'INIT'");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(stmt);
 			ConnectionProvider.close(conn);
@@ -60,7 +65,8 @@ public class InsertRolloutData {
 			stmt.executeUpdate("update `EPM`.`rollouttask` SET status ='"+ status + "', tcrollid ="+ tcrollid + ", attempt =" + attempt +" where poolname = '"+ poolname +"' and runid ="+ runid);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(stmt);
 			ConnectionProvider.close(conn);
@@ -76,7 +82,8 @@ public class InsertRolloutData {
 			stmt.executeUpdate("update `EPM`.`rollouttask` SET status ='"+ status + "' where tcrollid ="+ tcrollid);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(stmt);
 			ConnectionProvider.close(conn);

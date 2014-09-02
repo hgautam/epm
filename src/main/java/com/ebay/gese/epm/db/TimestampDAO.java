@@ -8,8 +8,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 
+import org.apache.log4j.Logger;
+
 public class TimestampDAO {
 	private String tStamp;
+	final static Logger logger = Logger.getLogger(TimestampDAO.class);
 	
 //	public String getTstamp() {
 //		return tStamp;
@@ -27,13 +30,15 @@ public class TimestampDAO {
 			while (rs.next()) {
 				//tStamp = rs.getString("timestamp");
 				  tStamp   = rs.getTimestamp("timestamp");
-				System.out.println("timestamp is " + tStamp);
+				  //System.out.println("timestamp is " + tStamp);
+				  logger.debug("timestamp is " + tStamp);
 			}
 			//return tStamp;
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.debug(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);

@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -19,17 +20,21 @@ import com.ebay.gese.epm.db.UpdateXSLBuildData;
 //import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 public class SubmitBuildService {
+	final static Logger logger = Logger.getLogger(SubmitBuildService.class);
 	public static void submitBuild(long buildid, String poolname, int runid, int attempt) {
 		StringBuilder sb = new StringBuilder();
 		
 		String deliverable = PoolDAO.getDeliverable(poolname);
 		
 		if (deliverable == null) {
-			System.out.println("Deliverable not found for "+ poolname);
+			//System.out.println("Deliverable not found for "+ poolname);
+			logger.debug("Deliverable not found for "+ poolname);
+			UpdateBuildData.updateBuildStatus(runid, poolname, "Rejected");
 			return;
 		}
 		
-		System.out.println("Calling submibBuild inside submitBuildService");
+		//System.out.println("Calling submibBuild inside submitBuildService");
+		logger.debug("Calling submibBuild inside submitBuildService");
 		
 		try {
 			URL url = new URL(
@@ -50,7 +55,8 @@ public class SubmitBuildService {
 					(conn.getInputStream())));
 
 			String output;
-			System.out.println("submitting build for deliverable " + deliverable);
+			//System.out.println("submitting build for deliverable " + deliverable);
+			logger.debug("submitting build for deliverable " + deliverable);
 			while ((output = br.readLine()) != null) {
 				sb.append(output);
 				System.out.println(output);
@@ -60,10 +66,12 @@ public class SubmitBuildService {
 
 		} catch (MalformedURLException e) {
 
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} catch (IOException e) {
 
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		}
 		
 		JSONParser parser = new JSONParser();
@@ -73,7 +81,8 @@ public class SubmitBuildService {
 			obj = parser.parse(sb.toString());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 			System.exit(1);
 		}
 		JSONObject jsonObject = (JSONObject) obj;
@@ -81,11 +90,14 @@ public class SubmitBuildService {
 			long requestid =  (Long)jsonObject.get("requestId");
 			long projectid =  (Long)jsonObject.get("projectId");
 			//System.out.println(status);
-			System.out.println("requestid is "+ requestid);
-			System.out.println("project id is "+ projectid);
+			//System.out.println("requestid is "+ requestid);
+			logger.debug("requestid is "+ requestid);
+			//System.out.println("project id is "+ projectid);
+			logger.debug("project id is "+ projectid);
 			UpdateBuildData.updateBuildStatus(runid, poolname, "Submitted", requestid, projectid, 0, attempt);
 		} else {
-			System.out.println("Autobuild api returned null");
+			//System.out.println("Autobuild api returned null");
+			logger.debug("Autobuild api returned null");
 		}
 		//return sb;
 	}
@@ -114,20 +126,24 @@ public class SubmitBuildService {
 					(conn.getInputStream())));
 
 			String output;
-			System.out.println("submitting build for deliverable " + deliverable);
+			//System.out.println("submitting build for deliverable " + deliverable);
+			logger.debug("submitting build for deliverable " + deliverable);
 			while ((output = br.readLine()) != null) {
 				sb.append(output);
-				System.out.println(output);
+				//System.out.println(output);
+				logger.debug(output);
 			}
 
 			conn.disconnect();
 
 		} catch (MalformedURLException e) {
 
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} catch (IOException e) {
 
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		}
 		
 		JSONParser parser = new JSONParser();
@@ -137,7 +153,8 @@ public class SubmitBuildService {
 			obj = parser.parse(sb.toString());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 			System.exit(1);
 		}
 		JSONObject jsonObject = (JSONObject) obj;
@@ -145,11 +162,14 @@ public class SubmitBuildService {
 			long requestid =  (Long)jsonObject.get("requestId");
 			long projectid =  (Long)jsonObject.get("projectId");
 			//System.out.println(status);
-			System.out.println("requestid is "+ requestid);
-			System.out.println("project id is "+ projectid);
+			//System.out.println("requestid is "+ requestid);
+			logger.debug("requestid is "+ requestid);
+			//System.out.println("project id is "+ projectid);
+			logger.debug("project id is "+ projectid);
 			UpdateXSLBuildData.updateBuildStatus(runid, "Submitted", requestid, projectid, 0, attempt);
 		} else {
-			System.out.println("Autobuild api returned null");
+			//System.out.println("Autobuild api returned null");
+			logger.debug("Autobuild api returned null");
 		}
 		//return sb;
 	}

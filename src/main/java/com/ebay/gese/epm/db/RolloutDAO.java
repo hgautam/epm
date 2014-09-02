@@ -6,7 +6,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 public class RolloutDAO {
+	final static Logger logger = Logger.getLogger(RolloutDAO.class);
 	public static ArrayList<RolloutTO> getPoolsToRoll(int runid) {
 		Connection conn = new ConnectionProvider().connection();
 		String sql = ("SELECT javabuild, xslbuild, poolname, train, attempt from rollouttask where RUNID =" + runid + " and status in ('ReadyToStart') and attempt < 3");
@@ -42,7 +45,8 @@ public class RolloutDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -89,7 +93,8 @@ public class RolloutDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -116,7 +121,8 @@ public class RolloutDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -143,7 +149,8 @@ public class RolloutDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);

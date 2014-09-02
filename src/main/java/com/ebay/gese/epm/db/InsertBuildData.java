@@ -7,8 +7,10 @@ import java.sql.SQLException;
 
 import java.sql.PreparedStatement;
 
+import org.apache.log4j.Logger;
+
 public class InsertBuildData {
-	
+	final static Logger logger = Logger.getLogger(InsertBuildData.class);
 	public static void setInitData(BuildTO bsd) {
 		Connection conn = new ConnectionProvider().connection();
 		PreparedStatement preparedStatement = null;
@@ -54,7 +56,8 @@ public class InsertBuildData {
 		 */
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			//ConnectionProvider.close(stmt);
 			ConnectionProvider.close(conn);
@@ -93,7 +96,8 @@ public class InsertBuildData {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			//ConnectionProvider.close(stmt);
 			ConnectionProvider.close(conn);

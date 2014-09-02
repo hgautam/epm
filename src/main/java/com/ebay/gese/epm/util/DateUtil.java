@@ -5,11 +5,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.sql.Timestamp;
 
+import org.apache.log4j.Logger;
+
 /*
  * Util Methods for date manipulation
  */
 public class DateUtil {
-	
+	final static Logger logger = Logger.getLogger(DateUtil.class);
 	public static boolean compareTimeStamps(String uiTime, String dbTime) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -20,7 +22,8 @@ public class DateUtil {
 			dbDate = df1.parse(dbTime); 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		}
 		if (uiDate.after(dbDate)) {
 			//System.out.println("API timestamp is newer!!");
@@ -41,7 +44,8 @@ public class DateUtil {
 			dbDate = df1.format(uiDate); 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		}
 		return dbDate;
 	}
@@ -56,7 +60,8 @@ public class DateUtil {
 		    normalizedDate = df1.format(origDate); 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		}
 		return normalizedDate;
 	}
@@ -71,7 +76,8 @@ public class DateUtil {
 			dbDate = df1.parse(dbTime); 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		}
 		if (currentDate.after(dbDate)) {
 			return true;

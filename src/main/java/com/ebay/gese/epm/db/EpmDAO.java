@@ -5,11 +5,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.log4j.Logger;
+
 /*
  * Access Object for any Data in EPM table
  */
 
 public class EpmDAO {
+	final static Logger logger = Logger.getLogger(EpmDAO.class);
 	public static String getCurrentLocale() {
 		Connection conn = new ConnectionProvider().connection();
 		String sql = ("SELECT locale FROM epm where RUNID = (SELECT MAX(RUNID) FROM epm)");
@@ -21,7 +24,8 @@ public class EpmDAO {
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				  locale   = rs.getString("locale");
-				System.out.println("locale is " + locale);
+				//System.out.println("locale is " + locale);
+				logger.debug("locale is " + locale);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -44,7 +48,8 @@ public class EpmDAO {
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				  runid   = rs.getInt("runid");
-				System.out.println("runid is " + runid);
+				//System.out.println("runid is " + runid);
+				logger.debug("runid is " + runid);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -67,7 +72,8 @@ public class EpmDAO {
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				runid   = rs.getInt("runid");
-				System.out.println("Previous runid is " + runid);
+				//System.out.println("Previous runid is " + runid);
+				logger.debug("Previous runid is " + runid);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

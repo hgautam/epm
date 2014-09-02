@@ -2,6 +2,7 @@ package com.ebay.gese.epm.domain;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -12,6 +13,7 @@ import com.ebay.gese.epm.db.EpmDAO;
 import com.ebay.gese.epm.webservices.MonitorBuildService;
 
 public class BuildMonitorManager implements Job{
+	final static Logger logger = Logger.getLogger(BuildMonitorManager.class);
 	public void execute(JobExecutionContext context)
 			throws JobExecutionException {
 		//get current run id
@@ -27,7 +29,8 @@ public class BuildMonitorManager implements Job{
 			    MonitorBuildService.getBuildStatus(bt.getProjectId(), bt.getRequestId());
 			}
 		} else {
-			System.out.println("Noting to monitor...");
+			//System.out.println("Noting to monitor...");
+			logger.debug("Noting to monitor...");
 		}
 		
         //start xsl build monitoring
@@ -35,10 +38,12 @@ public class BuildMonitorManager implements Job{
 		if (bto != null) {
 			MonitorBuildService.getXslBuildStatus(bto.getProjectId(), bto.getRequestId());
 		} else {
-			System.out.println("Noting to monitor...");
+			//System.out.println("Noting to monitor...");
+			logger.debug("Noting to monitor...");
 		}
 		
-		System.out.println("******End of RUN****");
+		//System.out.println("******End of RUN****");
+		logger.debug("******End of RUN****");
 		//System.exit(0);
 	}
 

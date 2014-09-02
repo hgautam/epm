@@ -5,8 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.log4j.Logger;
 
 public class ConnectionProvider {
+	final static Logger logger = Logger.getLogger(ConnectionProvider.class);
 	/*
 	public static void main(String[] args) throws Exception {
 		ConnectionProvider provider = new ConnectionProvider(
@@ -52,7 +54,8 @@ public class ConnectionProvider {
 			
 			return dataSource.getConnection();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 			return null;
 		}
 	}
@@ -62,7 +65,8 @@ public class ConnectionProvider {
 		try {		
 			con.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		}
 
 	}
@@ -73,7 +77,8 @@ public class ConnectionProvider {
 				rs.close();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		}
 
 	}
@@ -90,6 +95,7 @@ public class ConnectionProvider {
 				stmt.close();
 			}
 		} catch (Exception ex) {
+			logger.error(ex);
 
 		}
 
@@ -102,7 +108,7 @@ public class ConnectionProvider {
 				stmt.close();
 			}
 		} catch (Exception ex) {
-
+			logger.error(ex);
 		}
 
 	}

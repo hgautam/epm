@@ -7,7 +7,10 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 public class BuildDAO {
+	final static Logger logger = Logger.getLogger(BuildDAO.class);
 	public static boolean recordExists(String poolName, int trainid) {
 		Connection conn = new ConnectionProvider().connection();
 		String sql = ("SELECT count(*) FROM buildtaskdetail where train ="+ trainid +" and poolname ='"+ poolName +"'");
@@ -21,7 +24,8 @@ public class BuildDAO {
 			count = rs.getInt(1);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -48,7 +52,8 @@ public class BuildDAO {
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -72,7 +77,8 @@ public class BuildDAO {
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -94,7 +100,8 @@ public class BuildDAO {
             int totalRows = rs.getRow();
             rs.beforeFirst();
 			if (totalRows > 1) {
-				System.out.println("Getting more than one xsl builds for this run. No op");
+				//System.out.println("Getting more than one xsl builds for this run. No op");
+				logger.debug("Getting more than one xsl builds for this run. No op");
 			} else {
 				while (rs.next()) {
 					buildid = rs.getLong(1);
@@ -103,7 +110,8 @@ public class BuildDAO {
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -127,7 +135,8 @@ public class BuildDAO {
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -151,7 +160,8 @@ public class BuildDAO {
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -175,7 +185,8 @@ public class BuildDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -209,7 +220,8 @@ public class BuildDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -235,7 +247,8 @@ public class BuildDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -257,7 +270,8 @@ public class BuildDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -291,7 +305,8 @@ public class BuildDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -319,12 +334,14 @@ public class BuildDAO {
 				buildid   = rs.getLong("buildid");
 				String ppPoolname = PoolDAO.getppPoolname(poolname);
 				if (ppPoolname == null) {
-				    	System.out.println("No prepod pool name found for "+ poolname);
+				    	//System.out.println("No prepod pool name found for "+ poolname);
+				    	logger.debug("No prepod pool name found for "+ poolname);
 				    	continue;
 				} else {
 					//check if this pool name is already in rollouttask table for this runid
 					if (RolloutDAO.entryExists(runid, ppPoolname)) {
-						System.out.println("Rollout for pool "+ poolname + " is already in progress.");
+						//System.out.println("Rollout for pool "+ poolname + " is already in progress.");
+						logger.debug("Rollout for pool "+ poolname + " is already in progress.");
 					} else {
 						bto.setPoolName(poolname);
 						bto.setBuildId(buildid);
@@ -334,7 +351,8 @@ public class BuildDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -365,7 +383,8 @@ public class BuildDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -398,7 +417,8 @@ public class BuildDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -427,7 +447,8 @@ public class BuildDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);

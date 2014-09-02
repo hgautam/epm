@@ -5,6 +5,8 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.apache.log4j.Logger;
 /*
  * This class updates timestamp in the db
  */
@@ -12,6 +14,7 @@ public class InsertTimestamp {
 	private String uploadtime;
 	private String csTimestamp;
 	
+	final static Logger logger = Logger.getLogger(InsertTimestamp.class);
 	public InsertTimestamp(String timeStamp) {
 		csTimestamp = timeStamp;
 		Date dNow = new Date();
@@ -35,7 +38,8 @@ public class InsertTimestamp {
 			stmt.executeUpdate(query);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(stmt);
 			ConnectionProvider.close(conn);

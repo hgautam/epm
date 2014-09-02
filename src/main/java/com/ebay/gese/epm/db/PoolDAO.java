@@ -6,10 +6,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 public class PoolDAO {
-	
+	final static Logger logger = Logger.getLogger(PoolDAO.class);
 	public static String getDeliverable(String poolname) {
-		
 		Connection conn = new ConnectionProvider().connection();
 		String sql = ("SELECT deliverable from pools where name ='" + poolname + "'");
 		Statement stmt = null;
@@ -24,7 +25,8 @@ public class PoolDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -51,7 +53,8 @@ public class PoolDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -75,7 +78,8 @@ public class PoolDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
@@ -99,7 +103,8 @@ public class PoolDAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e);
 		} finally {
 			ConnectionProvider.close(rs, stmt);
 			ConnectionProvider.close(conn);
